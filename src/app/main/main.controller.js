@@ -1,88 +1,50 @@
 'use strict';
 
-angular.module('materialMedia')
-    .controller('MainCtrl', function($scope, $mdDialog, $sce) {
-        $scope.config = {
-            preload: "none",
-            sources: [{
-                src: $sce.trustAsResourceUrl("http://static.videogular.com/assets/videos/videogular.mp4"),
-                type: "video/mp4"
-            }, {
-                src: $sce.trustAsResourceUrl("http://static.videogular.com/assets/videos/videogular.webm"),
-                type: "video/webm"
-            }, {
-                src: $sce.trustAsResourceUrl("http://static.videogular.com/assets/videos/videogular.ogg"),
-                type: "video/ogg"
-            }],
-            tracks: [{
-                src: "http://www.videogular.com/assets/subs/pale-blue-dot.vtt",
-                kind: "subtitles",
-                srclang: "en",
-                label: "English",
-                default: ""
-            }],
-            theme: {
-                url: "http://www.videogular.com/styles/themes/default/latest/videogular.css"
-            }
-        };
-        var alert;
-        $scope.showDialog = function($event) {
-            alert = $mdDialog.alert({
-                title: 'Attention',
-                content: 'This is an example of how easy dialogs can be!',
-                ok: 'Close'
-            });
-
-            $mdDialog
-                .show(alert)
-                .finally(function() {
-                    alert = undefined;
-                });
+angular
+  .module('materialMedia')
+  .controller('MainCtrl', function($scope) {
+    this.tiles = buildGridModel({
+            icon : "avatar:svg-",
+            title: "Svg-",
+            background: ""
+          });
+    this.rotate = function() {
+      this.tiles.unshift(this.tiles.pop());
+    };
+    function buildGridModel(tileTmpl){
+      var it, results = [ ];
+      for (var j=0; j<11; j++) {
+        it = angular.extend({},tileTmpl);
+        it.icon  = it.icon + (j+1);
+        it.title = it.title + (j+1);
+        it.span  = { row : 1, col : 1 };
+        switch(j+1) {
+          case 1:
+            it.background = "red";
+            it.span.row = it.span.col = 2;
+            break;
+          case 2: it.background = "green";         break;
+          case 3: it.background = "darkBlue";      break;
+          case 4:
+            it.background = "blue";
+            it.span.col = 2;
+            break;
+          case 5:
+            it.background = "yellow";
+            it.span.row = it.span.col = 2;
+            break;
+          case 6: it.background = "pink";          break;
+          case 7: it.background = "darkBlue";      break;
+          case 8: it.background = "purple";        break;
+          case 9: it.background = "deepBlue";      break;
+          case 10: it.background = "lightPurple";  break;
+          case 11: it.background = "yellow";       break;
         }
-        $scope.awesomeThings = [{
-            'title': 'AngularJS',
-            'url': 'https://angularjs.org/',
-            'description': 'HTML enhanced for web apps!',
-            'logo': 'angular.png'
-        }, {
-            'title': 'BrowserSync',
-            'url': 'http://browsersync.io/',
-            'description': 'Time-saving synchronised browser testing.',
-            'logo': 'browsersync.png'
-        }, {
-            'title': 'GulpJS',
-            'url': 'http://gulpjs.com/',
-            'description': 'The streaming build system.',
-            'logo': 'gulp.png'
-        }, {
-            'title': 'Jasmine',
-            'url': 'http://jasmine.github.io/',
-            'description': 'Behavior-Driven JavaScript.',
-            'logo': 'jasmine.png'
-        }, {
-            'title': 'Karma',
-            'url': 'http://karma-runner.github.io/',
-            'description': 'Spectacular Test Runner for JavaScript.',
-            'logo': 'karma.png'
-        }, {
-            'title': 'Protractor',
-            'url': 'https://github.com/angular/protractor',
-            'description': 'End to end test framework for AngularJS applications built on top of WebDriverJS.',
-            'logo': 'protractor.png'
-        }, {
-            'title': 'Angular Material Design',
-            'url': 'https://material.angularjs.org/#/',
-            'description': 'The Angular reference implementation of the Google\'s Material Design specification.',
-            'logo': 'angular-material.png'
-        }, {
-            'title': 'Videogular',
-            'url': 'http://www.videogular.com/',
-            'description': 'Simple Angular Video',
-            'logo': 'angular-material.png'
-        }];
-        angular.forEach($scope.awesomeThings, function(awesomeThing) {
-            awesomeThing.rank = Math.random();
-        });
-
-
-    });
+        results.push(it);
+      }
+      return results;
+    }
+  })
+  .config( function( $mdIconProvider ){
+    $mdIconProvider.iconSet("avatar", 'assets/images/avatar-icons.svg', 128);
+  });
