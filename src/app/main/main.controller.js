@@ -6,7 +6,7 @@ angular
     this.tiles = buildGridModel({
             icon : "avatar:svg-",
             title: "Svg-",
-            background: ""
+            background: "#84ffff"
           });
     this.rotate = function() {
       this.tiles.unshift(this.tiles.pop());
